@@ -1,3 +1,4 @@
+///|
 typealias List[T] = @immut/list.T[T]
 
 ///|
@@ -8,6 +9,24 @@ enum SegTree {
   Empty
   Branch(Int, Range, SegTree, SegTree)
 } derive(Eq, Show)
+
+///|
+/// Creates an empty segment tree.
+pub fn SegTree::empty() -> SegTree {
+  Empty
+}
+
+///| 
+/// Creates a new segment tree with the specified range.
+pub fn SegTree::new(rng : (Int, Int)) -> SegTree {
+  match rng {
+    (a, b) if a == b => Branch(0, rng, Empty, Empty)
+    (a, b) => {
+      let mid = (a + b) / 2
+      Branch(0, rng, SegTree::new((a, mid)), SegTree::new((mid + 1, b)))
+    }
+  }
+}
 
 ///|
 /// Updates the value at a specific index in the segment tree.

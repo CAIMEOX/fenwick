@@ -1,4 +1,5 @@
-///|
+///| 
+/// Infinite bit representation
 enum Bits {
   Rep(Bit)
   Snoc(Bits, Bit)
