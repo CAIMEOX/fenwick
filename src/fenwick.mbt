@@ -1,9 +1,9 @@
 ///|
 /// A Fenwick Tree (also known as a Binary Indexed Tree) is a data structure that provides 
 /// efficient methods for prefix sums and point updates in an array.
-type FenwickTree Array[Int]
+struct FenwickTree(Array[Int])
 
-///| 
+///|
 /// Returns the Least Significant Bit (LSB) of an integer.
 /// 
 /// The LSB is important for Fenwick Tree operations as it determines the range 
@@ -18,7 +18,7 @@ fn FenwickTree::lsb(i : Int) -> Int {
   i & -i
 }
 
-///| 
+///|
 /// Creates a new Fenwick Tree with the specified length.
 /// 
 /// # Arguments
@@ -30,7 +30,7 @@ pub fn FenwickTree::new(len : Int) -> FenwickTree {
   Array::new(capacity=len)
 }
 
-///| 
+///|
 /// Computes the sum of elements from index 1 to i.
 /// 
 /// # Arguments
@@ -43,12 +43,12 @@ pub fn prefix(self : FenwickTree, i : Int) -> Int {
   let mut s = 0
   while i > 0 {
     i -= FenwickTree::lsb(i)
-    s += self._[i]
+    s += self.inner()[i]
   }
   s
 }
 
-///| 
+///|
 /// Adds a value to the element at position i and updates the tree accordingly.
 /// 
 /// # Arguments
@@ -56,13 +56,13 @@ pub fn prefix(self : FenwickTree, i : Int) -> Int {
 /// - delta: The value to add to the current value
 pub fn update(self : FenwickTree, i : Int, delta : Int) -> Unit {
   let mut i = i
-  while i < self._.length() {
-    self._[i] += delta
+  while i < self.inner().length() {
+    self.inner()[i] += delta
     i += FenwickTree::lsb(i)
   }
 }
 
-///| 
+///|
 /// Computes the sum of elements from index i to j (inclusive).
 /// 
 /// # Arguments
@@ -75,7 +75,7 @@ pub fn range(self : FenwickTree, i : Int, j : Int) -> Int {
   self.prefix(j) - self.prefix(i - 1)
 }
 
-///| 
+///|
 /// Gets the value at a specific index.
 /// 
 /// # Arguments
@@ -87,7 +87,7 @@ pub fn get(self : FenwickTree, i : Int) -> Int {
   self.range(i, i)
 }
 
-///| 
+///|
 /// Sets the value at a specific index.
 /// 
 /// # Arguments

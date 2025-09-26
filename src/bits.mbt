@@ -1,4 +1,4 @@
-///| 
+///|
 /// Infinite bit representation
 enum Bits {
   Rep(Bit)
@@ -59,7 +59,7 @@ pub fn Bits::from_bits(self : Bits) -> Int {
 
 ///|
 pub impl Show for Bits with to_string(self) {
-  fn go {
+  letrec go = b => match b {
     Rep(b) => b.to_string().repeat(3) + "..."
     s => {
       let (bs, b) = s.pat_match()
@@ -113,10 +113,10 @@ pub fn lsb(self : Bits) -> Bits {
 
 ///|
 test "lsb" {
-  inspect!(Bits::to_bits(26), content="...00011010")
-  inspect!(Bits::to_bits(26).lsb(), content="...00010")
-  inspect!(Bits::to_bits(24), content="...00011000")
-  inspect!(Bits::to_bits(24).lsb(), content="...0001000")
+  inspect(Bits::to_bits(26), content="...00011010")
+  inspect(Bits::to_bits(26).lsb(), content="...00010")
+  inspect(Bits::to_bits(24), content="...00011000")
+  inspect(Bits::to_bits(24).lsb(), content="...0001000")
 }
 
 ///|
@@ -142,7 +142,7 @@ pub fn Bits::inv(self : Bits) -> Bits {
 }
 
 ///|
-pub impl Add for Bits with op_add(self, other) {
+pub impl Add for Bits with add(self, other) {
   match (self, other) {
     (xs, Rep(O)) | (Rep(O), xs) => xs
     (Rep(I), Rep(I)) => Bits::make(Rep(I), O)
@@ -155,7 +155,7 @@ pub impl Add for Bits with op_add(self, other) {
 }
 
 ///|
-pub impl Neg for Bits with op_neg(self) {
+pub impl Neg for Bits with neg(self) {
   self.inv().inc()
 }
 
@@ -179,9 +179,9 @@ pub fn Bits::clear(self : Bits, idx : Int) -> Bits {
 
 ///|
 fn test_helper(self : Bits, i : Int) -> Bool {
-  loop i, self.pat_match() {
-    0, (_bs, b) => b == I
-    k, (bs, _b) => continue k - 1, bs.pat_match()
+  loop (i, self.pat_match()) {
+    (0, (_bs, b)) => b == I
+    (k, (bs, _b)) => continue (k - 1, bs.pat_match())
   }
 }
 
